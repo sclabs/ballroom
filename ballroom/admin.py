@@ -10,7 +10,8 @@ ballroom_models = [
     models.Routine,
     models.Video,
     models.Profile,
-    models.FigureInstance
+    models.FigureInstance,
+    models.Annotation
 ]
 
 admin.site.register(ballroom_models)
