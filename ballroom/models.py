@@ -52,6 +52,7 @@ class Figure(models.Model):
     cross_phrase = models.NullBooleanField(null=True)
     start_position = models.ForeignKey(Position, related_name='into_options')
     end_position = models.ForeignKey(Position, related_name='from_options')
+    rotation = models.IntegerField()
     length = models.IntegerField()
     count = models.CharField(max_length=1000)
     alt_count = models.CharField(max_length=1000, blank=True)
@@ -97,3 +98,9 @@ class FigureInstance(models.Model):
 
     def __unicode__(self):
         return "%s at index %i in %s" % (self.figure.name, self.index, self.routine.name)
+
+class Annotation(models.Model):
+    routine = models.ForeignKey(Routine, related_name='annotations')
+    start = models.CharField(max_length=10)
+    end = models.CharField(max_length=10)
+    message = models.CharField(max_length=100)
