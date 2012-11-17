@@ -104,3 +104,6 @@ class Annotation(models.Model):
     start = models.CharField(max_length=10)
     end = models.CharField(max_length=10)
     message = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return "%s from %s to %s in %s" % (self.message, self.start, self.end, self.routine.title)
