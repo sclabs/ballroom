@@ -49,6 +49,7 @@ class Figure(models.Model):
     name = models.CharField(max_length=50)
     dance = models.ForeignKey(Dance, related_name='figures')
     level = models.ForeignKey(Level, related_name='figures')
+    mirror_figure = models.OneToOneField('self', null=True)
     cross_phrase = models.NullBooleanField(null=True)
     start_position = models.ForeignKey(Position, related_name='into_options')
     end_position = models.ForeignKey(Position, related_name='from_options')
