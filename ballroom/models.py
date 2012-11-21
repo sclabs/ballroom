@@ -14,8 +14,10 @@ class Style(models.Model):
         return self.name
 
 class Dance(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
     style = models.ForeignKey(Style, related_name='dances')
+    count = models.IntegerField()
+    espana_cani = models.BooleanField()
 
     def __unicode__(self):
         return self.style.name + self.name
@@ -87,7 +89,8 @@ class Profile(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User, related_name='profiles')
     friends = models.ManyToManyField('self')
-    favorites = models.ManyToManyField(Routine, related_name='favorited_by')
+    favorite_routines = models.ManyToManyField(Routine, related_name='favorited_by')
+    favorite_figures = models.ManyToManyField(Figure, related_name='+')
 
     def __unicode__(self):
         return self.name
