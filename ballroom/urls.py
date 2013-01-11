@@ -1,17 +1,45 @@
 from django.conf.urls import patterns, include, url
-
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from .settings import DEBUG, MEDIA_ROOT, STATIC_ROOT
+from django.views.generic.simple import direct_to_template
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', 'ballroom.views.home', name='home'),
-    # url(r'^ballroom/', include('ballroom.foo.urls')),
+    # changelog
+    url(r'^changelog/$', direct_to_template, {'template': 'changelog.html'}, name='changelog'),
+                       
+    # socialeditor app
+    url(r'^', include('socialeditor.urls')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # auth-related URLs
+    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/loggedout/'}, name='logout'),
+    url(r'^switchuser/$', 'django.contrib.auth.views.logout_then_login', name='switchuser'),
+    url(r'^loggedout/$', 'ballroom.views.loggedout'),
+    url(r'^changepassword/$', 'django.contrib.auth.views.password_change', name='changepassword'),
+    url(r'^passwordchanged/$', 'django.contrib.auth.views.password_change_done'),
+    
+    # password reset urls (not working)
+    #url(r'^resetpassword/$', 'django.contrib.auth.views.password_reset'),
+    #url(r'^resetsent/$', 'django.contrib.auth.views.password_reset_done'),
+    #url(r'^setnewpassword/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm'),
+    #url(r'^setnewpassword/[0-9A-Za-z]+-.+/$', 'django.contrib.auth.views.password_reset_confirm'),
+    #url(r'^resetcomplete/$', 'django.contrib.auth.views.password_reset_complete'),
 
-    # Uncomment the next line to enable the admin:
+    # admin docs
+    #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+    # admin
     url(r'^admin/', include(admin.site.urls)),
 )
+
+# DEV ONLY!!!!!!!!!!
+#
+# this magic code snippet allows the dev server to serve anything in media/ and static/
+if DEBUG:
+    urlpatterns += patterns('',
+        #url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': MEDIA_ROOT,}),
+        #url(r'^static/admin/(?P<path>.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT + '/admin/',}),
+        url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': STATIC_ROOT,})
+                            )

@@ -1,4 +1,6 @@
-from django.http import HttpResponse
+from django.shortcuts import render_to_response
 
-def home(request):
-    return HttpResponse("Hello, world!")
+def loggedout(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/logout/')
+    return render_to_response('registration/logout.html')
