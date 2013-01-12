@@ -50,3 +50,7 @@ node_modules
 .settings
 .classpath
 .project
+
+# venv #
+########
+venv
