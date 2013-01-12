@@ -15,6 +15,18 @@ def view_profile(request, short_name):
     # list routines tied to this profile
     return HttpResponse("Viewing profile of " + profile.display_name)
 
+def add_friend(request, short_name, add_short_name):
+    profile = get_object_or_404(Profile, short_name=short_name)
+    # make sure the current user owns the profile, if not error
+    friend = get_object_or_404(Profile, short_name=add_short_name)
+    return HttpResponse("Adding friend " + friend.display_name)
+
+def remove_friend(request, short_name, remove_short_name):
+    profile = get_object_or_404(Profile, short_name=short_name)
+    # make sure the current user owns the profile, if not error
+    friend = get_object_or_404(Profile, short_name=remove_short_name)
+    return HttpResponse("Removing friend " + friend.display_name)
+
 def delete_profile(request, short_name):
     profile = get_object_or_404(Profile, short_name=short_name)
     # make sure the current user owns the profile, if not error
