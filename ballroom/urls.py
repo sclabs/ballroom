@@ -8,6 +8,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # changelog
     url(r'^changelog/$', direct_to_template, {'template': 'changelog.html'}, name='changelog'),
+
+    # admin
+    url(r'^admin/', include(admin.site.urls)),
                        
     # socialeditor app
     url(r'^', include('socialeditor.urls')),
@@ -29,9 +32,6 @@ urlpatterns = patterns('',
 
     # admin docs
     #url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # admin
-    url(r'^admin/', include(admin.site.urls)),
 )
 
 # DEV ONLY!!!!!!!!!!

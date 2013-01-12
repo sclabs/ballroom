@@ -8,31 +8,31 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'Figure_Instance'
-        db.delete_table('ballroom_figure_instance')
+        # Deleting field 'Profile.name'
+        db.delete_column('socialeditor_profile', 'name')
 
-        # Adding model 'FigureInstance'
-        db.create_table('ballroom_figureinstance', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('figure', self.gf('django.db.models.fields.related.ForeignKey')(related_name='instances', to=orm['ballroom.Figure'])),
-            ('routine', self.gf('django.db.models.fields.related.ForeignKey')(related_name='figure_instances', to=orm['ballroom.Routine'])),
-            ('index', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('ballroom', ['FigureInstance'])
+        # Adding field 'Profile.display_name'
+        db.add_column('socialeditor_profile', 'display_name',
+                      self.gf('django.db.models.fields.CharField')(default='Test Profile', max_length=50),
+                      keep_default=False)
+
+        # Adding field 'Profile.short_name'
+        db.add_column('socialeditor_profile', 'short_name',
+                      self.gf('django.db.models.fields.CharField')(default='test', unique=True, max_length=20),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Adding model 'Figure_Instance'
-        db.create_table('ballroom_figure_instance', (
-            ('index', self.gf('django.db.models.fields.IntegerField')()),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('figure', self.gf('django.db.models.fields.related.ForeignKey')(related_name='instances', to=orm['ballroom.Figure'])),
-            ('routine', self.gf('django.db.models.fields.related.ForeignKey')(related_name='figure_instances', to=orm['ballroom.Routine'])),
-        ))
-        db.send_create_signal('ballroom', ['Figure_Instance'])
+        # Adding field 'Profile.name'
+        db.add_column('socialeditor_profile', 'name',
+                      self.gf('django.db.models.fields.CharField')(default='test', max_length=50),
+                      keep_default=False)
 
-        # Deleting model 'FigureInstance'
-        db.delete_table('ballroom_figureinstance')
+        # Deleting field 'Profile.display_name'
+        db.delete_column('socialeditor_profile', 'display_name')
+
+        # Deleting field 'Profile.short_name'
+        db.delete_column('socialeditor_profile', 'short_name')
 
 
     models = {
@@ -65,41 +65,60 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        'ballroom.dance': {
-            'Meta': {'object_name': 'Dance'},
+        'contenttypes.contenttype': {
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            'style': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'dances'", 'to': "orm['ballroom.Style']"})
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'ballroom.figure': {
+        'socialeditor.annotation': {
+            'Meta': {'object_name': 'Annotation'},
+            'end': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'message': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'routine': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'annotations'", 'to': "orm['socialeditor.Routine']"}),
+            'start': ('django.db.models.fields.CharField', [], {'max_length': '10'})
+        },
+        'socialeditor.dance': {
+            'Meta': {'object_name': 'Dance'},
+            'count': ('django.db.models.fields.IntegerField', [], {}),
+            'espana_cani': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'style': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'dances'", 'to': "orm['socialeditor.Style']"})
+        },
+        'socialeditor.figure': {
             'Meta': {'object_name': 'Figure'},
             'alt_count': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'}),
             'comment': ('django.db.models.fields.TextField', [], {}),
             'count': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'cross_phrase': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
-            'dance': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figures'", 'to': "orm['ballroom.Dance']"}),
-            'end_position': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'from_options'", 'to': "orm['ballroom.Position']"}),
+            'dance': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figures'", 'to': "orm['socialeditor.Dance']"}),
+            'end_position': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'from_options'", 'to': "orm['socialeditor.Position']"}),
             'follow_steps': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lead_steps': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
             'length': ('django.db.models.fields.IntegerField', [], {}),
-            'level': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figures'", 'to': "orm['ballroom.Level']"}),
+            'level': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figures'", 'to': "orm['socialeditor.Level']"}),
+            'mirror_figure': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['socialeditor.Figure']", 'unique': 'True', 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'start_position': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'into_options'", 'to': "orm['ballroom.Position']"})
+            'rotation': ('django.db.models.fields.IntegerField', [], {}),
+            'start_position': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'into_options'", 'to': "orm['socialeditor.Position']"})
         },
-        'ballroom.figureinstance': {
+        'socialeditor.figureinstance': {
             'Meta': {'object_name': 'FigureInstance'},
-            'figure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'instances'", 'to': "orm['ballroom.Figure']"}),
+            'figure': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'instances'", 'to': "orm['socialeditor.Figure']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'index': ('django.db.models.fields.IntegerField', [], {}),
-            'routine': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figure_instances'", 'to': "orm['ballroom.Routine']"})
+            'routine': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'figure_instances'", 'to': "orm['socialeditor.Routine']"})
         },
-        'ballroom.level': {
+        'socialeditor.level': {
             'Meta': {'object_name': 'Level'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
-        'ballroom.position': {
+        'socialeditor.position': {
             'Meta': {'object_name': 'Position'},
             'follow_weight': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'hold': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
@@ -107,43 +126,38 @@ class Migration(SchemaMigration):
             'inside_partner': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'lead_weight': ('django.db.models.fields.CharField', [], {'max_length': '1'})
         },
-        'ballroom.profile': {
+        'socialeditor.profile': {
             'Meta': {'object_name': 'Profile'},
-            'favorites': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'favorited_by'", 'symmetrical': 'False', 'to': "orm['ballroom.Routine']"}),
-            'friends': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'friends_rel_+'", 'to': "orm['ballroom.Profile']"}),
+            'display_name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'favorite_figures': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'+'", 'symmetrical': 'False', 'to': "orm['socialeditor.Figure']"}),
+            'favorite_routines': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'favorited_by'", 'symmetrical': 'False', 'to': "orm['socialeditor.Routine']"}),
+            'friends': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'friends_rel_+'", 'to': "orm['socialeditor.Profile']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'short_name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'profiles'", 'to': "orm['auth.User']"})
         },
-        'ballroom.routine': {
+        'socialeditor.routine': {
             'Meta': {'object_name': 'Routine'},
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'routines_created'", 'to': "orm['auth.User']"}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'editors': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'routines_editable'", 'symmetrical': 'False', 'to': "orm['auth.User']"}),
-            'figures': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['ballroom.Figure']", 'through': "orm['ballroom.FigureInstance']", 'symmetrical': 'False'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'figures': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['socialeditor.Figure']", 'through': "orm['socialeditor.FigureInstance']", 'symmetrical': 'False'}),
+            'id': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '10', 'primary_key': 'True', 'db_index': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
-        'ballroom.style': {
+        'socialeditor.style': {
             'Meta': {'object_name': 'Style'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '10'})
         },
-        'ballroom.video': {
+        'socialeditor.video': {
             'Meta': {'object_name': 'Video'},
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'link': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'routine': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'videos'", 'to': "orm['ballroom.Routine']"}),
+            'routine': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'videos'", 'to': "orm['socialeditor.Routine']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }
 
-    complete_apps = ['ballroom']
+    complete_apps = ['socialeditor']
