@@ -8,19 +8,15 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="{% url market %}">Stronghold Kingdoms</a>
+      <a class="brand" href="{% url home %}">ballroom.gilgi.org</a>
       <div class="nav-collapse">
         <ul class="nav">
-          <li><a href="{% url market %}">Market</a></li>
-          <li><a href="{% url villages %}">Villages</a></li>
-          <li><a href="{% url changelog %}">Changelog</a></li>
-          <li class="divider-vertical"></li>
-          <li><a href="http://wiki.gilgi.org/shk/">Wiki</a></li>
+          <li><a href="{% url home %}">Home</a></li>
         </ul>
         <ul class="nav pull-right">
           {% if user.is_authenticated %}
           <li class="dropdown">
-            <a href="http://gilgi.org" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="{% url changepassword %}">Change Password</a></li>
               <li><a href="{% url switchuser %}">Switch User</a></li>
