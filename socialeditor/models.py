@@ -236,8 +236,6 @@ class Figure(models.Model):
 class Routine(RandomPrimaryIdModel):
     title = models.CharField(max_length=50)
     figures = models.ManyToManyField(Figure, through='FigureInstance')
-    creator = models.ForeignKey(User, related_name='routines_created')
-    editors = models.ManyToManyField(User, related_name='routines_editable')
     description = models.TextField()
 
     def __unicode__(self):
@@ -252,16 +250,22 @@ class Video(RandomPrimaryIdModel):
     def __unicode__(self):
         return self.title
 
-class Profile(models.Model):
+class SocialEntity(models.model):
     display_name = models.CharField(max_length=50)
     short_name = models.CharField(max_length=20, unique=True, validators=[RegexValidator(regex="^[a-zA-Z0-9]{6,20}$")])
-    user = models.ForeignKey(User, related_name='profiles')
-    friends = models.ManyToManyField('self')
     favorite_routines = models.ManyToManyField(Routine, related_name='favorited_by')
-    favorite_figures = models.ManyToManyField(Figure, related_name='+')
+    editable_routines = models.ManyToManyField(Routine, related_name='editors')
 
     def __unicode__(self):
         return self.name
+
+class Profile(SocialEntity):
+    user = models.OneToOneField(User)
+    friends = models.ManyToManyField('self')
+    favorite_figures = models.ManyToManyField(Figure, related_name='+')
+
+class Group(SocialEntity):
+    members = models.ManyToManyField(Profile, related_name='member_of')
 
 class FigureInstance(models.Model):
     figure = models.ForeignKey(Figure, related_name='instances')
