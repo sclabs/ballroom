@@ -275,6 +275,21 @@ class FigureInstance(models.Model):
     def __unicode__(self):
         return "%s at index %i in %s" % (self.figure.name, self.index, self.routine.name)
 
+class Comment(models.Model):
+    profile = models.ForeignKey(Profile)
+    routine = models.ForeignKey(Routine)
+    comment = models.CharField(max_length=100)
+    created = models.DateTimeField()
+
+    def save(self):
+        if self.date_created == None:
+            self.date_created = datetime.now()
+        super(Comment, self).save()
+
+    def __unicode__(self):
+        return self.comment
+    
+
 class Annotation(models.Model):
     routine = models.ForeignKey(Routine, related_name='annotations')
     start = models.CharField(max_length=10)

@@ -7,6 +7,7 @@ from models import Profile, Routine, Video
 ########
 
 def home(request):
+    # do the usual if request.method == 'POST': split (comments)
     return HttpResponse("Hello, world!")
 
 # profiles #
@@ -14,6 +15,7 @@ def home(request):
 
 def view_profile(request, short_name):
     profile = get_object_or_404(Profile, short_name=short_name)
+    # do the usual if request.method == 'POST': split (comments)
     return HttpResponse("Viewing profile of " + profile.display_name)
 
 def edit_profile(request, short_name):
@@ -42,6 +44,7 @@ def create_group(request):
 
 def view_group(request, short_name):
     group = get_object_or_404(Group, short_name=short_name)
+    # do the usual if request.method == 'POST': split (comments)
     return HttpResponse("Viewing group " + group.display_name)
 
 def edit_group(request, short_name):
@@ -73,6 +76,7 @@ def create_routine(request):
 
 def view_routine(request, routine_id):
     routine = get_object_or_404(Routine, id=routine_id)
+    # do the usual if request.method == 'POST': split (comments)
     return HttpResponse("Viewing routine " + routine.title)
 
 def edit_routine(request, routine_id):
