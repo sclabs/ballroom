@@ -243,7 +243,7 @@ class Routine(RandomPrimaryIdModel):
     def __unicode__(self):
         return self.title
 
-class Video(models.Model):
+class Video(RandomPrimaryIdModel):
     title = models.CharField(max_length=50)
     routine = models.ForeignKey(Routine, related_name='videos')
     link = models.CharField(max_length=100)
