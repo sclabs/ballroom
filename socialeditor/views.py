@@ -48,7 +48,7 @@ def view_routine(request, short_name, routine_id):
 def edit_routine(request, short_name, routine_id):
     routine = get_object_or_404(Routine, id=routine_id)
     profile = get_object_or_404(Profile, short_name=short_name)
-    # check if the profile owns the routine, if not 404
+    # check if the profile owns or is an editor on the routine, if not 404
     # make sure the current user owns the profile, if not error
     return HttpResponse("Editing routine " + routine.title)
 
