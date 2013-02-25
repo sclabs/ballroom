@@ -250,7 +250,7 @@ class Video(RandomPrimaryIdModel):
     def __unicode__(self):
         return self.title
 
-class SocialEntity(models.model):
+class SocialEntity(models.Model):
     display_name = models.CharField(max_length=50)
     short_name = models.CharField(max_length=20, unique=True, validators=[RegexValidator(regex="^[a-zA-Z0-9]{6,20}$")])
     favorite_routines = models.ManyToManyField(Routine, related_name='favorited_by')
